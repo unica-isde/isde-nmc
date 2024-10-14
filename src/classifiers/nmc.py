@@ -3,14 +3,30 @@ from sklearn.metrics import pairwise_distances
 
 
 def softmax(x):
-    """Compute softmax values for each row in x."""
+    """
+    Softmax-scaling of input matrix values.
+    Each row will be normalized to sum up to one.
+
+    Parameters
+    ----------
+    x : ndarray
+        the input matrix
+
+    Returns
+    -------
+        the softmax-scaled outputs
+    """
     e_x = np.exp(x - np.max(x))
     return e_x / e_x.sum(axis=1, keepdims=True)
 
 
-class NMC():
+class NMC:
+    """
+    Class defined for NMC classifier.
+    """
+
     def __init__(self):
-        self.centroids = None
+        self._centroids = None
 
     @property
     def centroids(self):
@@ -21,7 +37,18 @@ class NMC():
     #    self._centroids = value
 
     def fit(self, xtr, ytr):
-        """ Compute the average centroid for each class."""
+        """
+        Compute the average centroids for each class
+
+        Parameters
+        ----------
+        xtr: training data
+        ytr: training labels
+
+        Returns
+        -------
+        self: trained NMC classifier
+        """
 
         n_dimensions = xtr.shape[1]
         n_classes = np.unique(ytr).size
@@ -31,11 +58,19 @@ class NMC():
             self._centroids[k, :] = np.mean(xtr[ytr == k, :], axis=0)
         return self
 
+
     def decision_function(self, xts):
         """
         Compute similarities with centroids
-        :param xts:
-        :return:
+
+        Parameters
+        ----------
+        xts : ndarray
+            Input samples to be classified
+
+        Returns
+        -------
+            Output values for each sample vs class
         """
         if self.centroids is None:
             raise ValueError(
@@ -45,7 +80,19 @@ class NMC():
         sim = 1 / (1e-3 + dist)
         return sim
 
+
     def predict(self, xts):
+        """
+        Brand new docstring
+
+        Parameters
+        ----------
+        xts
+
+        Returns
+        -------
+
+        """
         scores = self.decision_function(xts)
         ypred = np.argmax(scores, axis=1)
         return ypred
