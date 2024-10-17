@@ -1,13 +1,26 @@
 import unittest
 
+import numpy as np
+from classifiers import NMC
+
 
 class TestNMC(unittest.TestCase):
 
     def setUp(self):
-        pass
+        self.n_samples = 10
+        self.n_features = 100
+        self.n_classes = 2
+        self.x = np.zeros(shape=(self.n_samples, self.n_features))
+        self.x[-1, :] = 1
+        self.y = np.zeros(shape=(self.n_samples))
+        self.y[-1] = 1
+        self.clf = NMC()
 
     def test_fit(self):
-        pass
+        self.clf.fit(self.x, self.y)
+        self.assertEqual(
+            (self.n_classes, self.n_features), self.clf.centroids.shape)
+
 
     def test_predict(self):
         pass
