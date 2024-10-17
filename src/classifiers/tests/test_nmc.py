@@ -20,7 +20,10 @@ class TestNMC(unittest.TestCase):
         self.clf.fit(self.x, self.y)
         self.assertEqual(
             (self.n_classes, self.n_features), self.clf.centroids.shape)
-
+        centroids = np.zeros(shape=(self.n_classes, self.n_features))
+        centroids[-1, :] = 1
+        self.assertEqual(0,
+            np.round(np.mean(centroids-self.clf.centroids), 6))
 
     def test_predict(self):
         pass
