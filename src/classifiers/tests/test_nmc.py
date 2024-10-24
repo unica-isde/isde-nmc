@@ -26,6 +26,16 @@ class TestNMC(unittest.TestCase):
             np.round(np.mean(centroids-self.clf.centroids), 6))
 
     def test_predict(self):
-        pass
+        # test the exception
+        self.assertRaises(ValueError, self.clf.predict, self.x)
+
+        self.clf.fit(self.x, self.y)
+        ypred = self.clf.predict(self.x)
+        self.assertEqual(ypred.shape, self.y.shape)
+        self.assertEqual(np.sum(ypred==self.y), self.n_samples)
+
+        probs = self.clf.decision_function(self.x, softmax_scaling=True)
+        v = np.sum(probs, axis=1)
+        self.assertAlmostEqual(self.n_samples, np.sum(v))
 
 

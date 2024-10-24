@@ -58,8 +58,7 @@ class NMC:
             self._centroids[k, :] = np.mean(xtr[ytr == k, :], axis=0)
         return self
 
-
-    def decision_function(self, xts):
+    def decision_function(self, xts, softmax_scaling=False):
         """
         Compute similarities with centroids
 
@@ -78,8 +77,7 @@ class NMC:
 
         dist = pairwise_distances(xts, self.centroids)
         sim = 1 / (1e-3 + dist)
-        return sim
-
+        return sim if softmax_scaling is False else softmax(sim)
 
     def predict(self, xts):
         """
